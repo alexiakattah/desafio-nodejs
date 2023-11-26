@@ -1,21 +1,30 @@
 import UserRepository from "@/app/repositories/userRepository";
 import User from "@/domain/entities/user";
+import { prisma } from "../prisma/prismaClient";
 
 class UserRepositoryPrisma implements UserRepository {
-  createUser(user: User): Promise<User> {
-    throw new Error("Method not implemented.");
+  async create(user: User): Promise<User> {
+    const result = await prisma.user.create({
+      data: {
+        name: user.name,
+        email: user.email,
+        password: user.password,
+      },
+    });
+    return result;
   }
-  deleteUser(id: string): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
-  findUserByEmail(email: string): Promise<User> {
-    throw new Error("Method not implemented.");
-  }
-  findUserById(id: string): Promise<User> {
-    throw new Error("Method not implemented.");
-  }
-  updateUser(user: User): Promise<User> {
-    throw new Error("Method not implemented.");
+  async findUserByEmail(email: string): Promise<User | null> {
+    const result = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+      },
+    });
+    return result;
   }
 }
 
