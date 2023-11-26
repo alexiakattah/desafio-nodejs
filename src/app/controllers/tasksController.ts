@@ -1,9 +1,9 @@
 import { HttpRequest, HttpResponse } from "@/infra/http/httpAdapter";
-import ProjectUseCase from "../usecases/projectUseCase";
+import TasksUseCase from "../usecases/tasksUseCase";
 
-export default class ProjectController {
-  constructor(private projectUseCase: ProjectUseCase) {
-    this.projectUseCase = projectUseCase;
+export default class TasksController {
+  constructor(private tasksUseCase: TasksUseCase) {
+    this.tasksUseCase = tasksUseCase;
   }
 
   public async create(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -15,7 +15,7 @@ export default class ProjectController {
           message: "name or description",
         };
 
-      const project = await this.projectUseCase.create({
+      const project = await this.tasksUseCase.create({
         name,
         description,
         members: members ? members : [],

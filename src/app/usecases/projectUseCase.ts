@@ -6,6 +6,7 @@ class ProjectUseCase {
 
   public async create(project: Project): Promise<Project> {
     const newProject = await this.projectRepository.create(project);
+
     return newProject;
   }
 }
