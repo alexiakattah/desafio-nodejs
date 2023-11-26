@@ -23,8 +23,7 @@ model Project {
   name        String
   description String
   createdAt   DateTime @default(now())
-  userId      String
-  users       User[]
+  members     User[]
   tasks       Task[]
 }
 

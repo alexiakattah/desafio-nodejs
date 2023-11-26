@@ -24,7 +24,7 @@ export class UserController {
       };
       const user = await this.userUseCase.create(userData);
       return {
-        status: 200,
+        status: 201,
         body: user,
       };
     } catch (error: any) {

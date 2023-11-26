@@ -18,13 +18,16 @@ class UserRepositoryPrisma implements UserRepository {
       where: {
         email,
       },
-      select: {
-        id: true,
-        name: true,
-        email: true,
+    });
+    return result ? result : null;
+  }
+  async findUserById(id: string): Promise<User | null> {
+    const result = await prisma.user.findUnique({
+      where: {
+        id,
       },
     });
-    return result;
+    return result ? result : null;
   }
 }
 
