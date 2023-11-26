@@ -1,11 +1,18 @@
-import express, { Application } from "express";
+import cors from "cors";
+import express from "express";
+import HttpServer from "./server";
 
-const app: Application = express();
-const PORT = 3333;
-app.use(express.json());
+export default class ExpressAdapter extends HttpServer {
+  app: any;
 
-// app.get("/", ExpressAdapter.adapt());
+  constructor() {
+    super();
+    this.app = express();
+    this.app.use(express.json());
+    this.app.use(cors());
+  }
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+  listen(port: number, callback: Function): void {
+    this.app.listen(port, callback);
+  }
+}

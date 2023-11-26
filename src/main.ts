@@ -1,7 +1,14 @@
-import { setup } from "@/main/config/app";
+import ExpressAdapter from "./infra/http/express";
+import swagger from "./infra/swagger";
 
-const app = setup();
+import "dotenv/config";
+import userController from "./main/routes/user.routes";
+
+const httpServer = new ExpressAdapter();
 const PORT = 3333 || process.env.PORT;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+
+swagger(httpServer.app);
+userController(httpServer.app);
+httpServer.listen(PORT, () =>
+  console.log(`Server running at http://localhost:${PORT}`)
+);

@@ -1,0 +1,8 @@
+import { UserController } from "@/app/controllers/userController";
+import { Router } from "express";
+import { adaptRoute } from "../adapters/adapterRoute";
+import { makeUserUseCase } from "../factories/userFactory";
+const userController = new UserController(makeUserUseCase());
+export default (router: Router): void => {
+  router.post("/register", adaptRoute(userController, "register"));
+};
