@@ -8,16 +8,24 @@ export const adaptRoute = (controller: any, method: any) => {
     if (typeof controller[method] !== "function") {
       notFound(`Method ${method} not found on controller ${controller}`);
     }
+    console.log(
+      "🚀 ~ file: adapterRoute.ts:7 ~ adaptRoute ~ controller:",
+      req.user_id,
+      req.headers
+    );
     const httpRequest: HttpRequest = {
       body: req.body,
+      params: req.params,
+      query: req.query,
+      headers: req.headers,
+      user_id: req.user_id,
     };
     const httpResponse = await controller[method](httpRequest);
-    console.log(
-      "🚀 ~ file: adapterRoute.ts:15 ~ return ~ httpResponse:",
-      httpResponse
-    );
+
     if (httpResponse.status >= 200 && httpResponse.status <= 299) {
       res.status(httpResponse.status).json(httpResponse.body);
-    } else errorMiddleware(httpResponse, req, res);
+    } else {
+      errorMiddleware(httpResponse, req, res);
+    }
   };
 };

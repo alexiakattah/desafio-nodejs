@@ -1,57 +1,63 @@
-import HttpError from "../../src/app/errors/httpError";
-import TasksRepository from "../../src/app/repositories/tasksRepository";
-import ProjectUseCase from "../../src/app/usecases/projectUseCase";
-import TagUseCase from "../../src/app/usecases/tagUseCase";
+import TasksController from "../../src/app/controllers/tasksController";
 import TasksUseCase from "../../src/app/usecases/tasksUseCase";
-import UserUseCase from "../../src/app/usecases/userUseCase";
-import Tasks from "../../src/domain/entities/tasks";
+import { Status } from "../../src/domain/entities/tasks";
 
-describe("TasksUseCase", () => {
-  let tasksUseCase: TasksUseCase;
-  let mockTasksRepository: jest.Mocked<TasksRepository>;
-  let mockProjectUseCase: jest.Mocked<ProjectUseCase>;
-  let mockUserUseCase: jest.Mocked<UserUseCase>;
-  let mockTagUseCase: jest.Mocked<TagUseCase>;
+describe("TasksController", () => {
+  let tasksController: TasksController;
+  let mockTasksUseCase: jest.Mocked<TasksUseCase>;
 
   beforeEach(() => {
-    mockTasksRepository = {
+    mockTasksUseCase = {
       create: jest.fn(),
-      // Add other methods as needed
     } as any;
-    mockProjectUseCase = {
-      findProjectById: jest.fn(),
-      // Add other methods as needed
-    } as any;
-    mockUserUseCase = {
-      findUserById: jest.fn(),
-      // Add other methods as needed
-    } as any;
-    mockTagUseCase = {
-      create: jest.fn(),
-      // Add other methods as needed
-    } as any;
-    tasksUseCase = new TasksUseCase(
-      mockTasksRepository,
-      mockProjectUseCase,
-      mockUserUseCase,
-      mockTagUseCase
-    );
+    tasksController = new TasksController(mockTasksUseCase);
   });
 
-  it("should throw an error if project is not found", async () => {
-    const tasks: Tasks = {
-      title: "test",
-      description: "test description",
-      status: "test",
-      projectId: "1",
-      members: ["1"],
-      tags: ["1"],
+  it("should create a task", async () => {
+    const httpRequest = {
+      body: {
+        title: "Test Task",
+        description: "This is a test task",
+        members: ["1"],
+        tags: ["tag1", "tag2"],
+        projectId: "1",
+      },
+      user_id: "1",
     };
-    const userId = "1";
-    mockProjectUseCase.findProjectById.mockResolvedValue(null);
 
-    await expect(tasksUseCase.create(tasks, userId)).rejects.toThrow(
-      new HttpError(404, "Project not found")
-    );
+    mockTasksUseCase.create.mockResolvedValue({
+      id: "1",
+      title: httpRequest.body.title,
+      description: httpRequest.body.description,
+      members: httpRequest.body.members,
+      tags: httpRequest.body.tags,
+      projectId: httpRequest.body.projectId,
+      status: Status.PENDING,
+    });
+
+    const httpResponse = await tasksController.create(httpRequest);
+
+    expect(httpResponse.status).toBe(201);
+    expect(httpResponse.body).toEqual({
+      id: "1",
+      title: httpRequest.body.title,
+      description: httpRequest.body.description,
+      members: httpRequest.body.members,
+      tags: httpRequest.body.tags,
+      projectId: httpRequest.body.projectId,
+      status: Status.PENDING,
+    });
+  });
+
+  it("should return an error if title or description is missing", async () => {
+    const httpRequest = {
+      body: {},
+      user_id: "1",
+    };
+
+    const httpResponse = await tasksController.create(httpRequest);
+
+    expect(httpResponse.status).toBe(400);
+    expect(httpResponse.message).toBe("name or description");
   });
 });

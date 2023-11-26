@@ -24,7 +24,7 @@ export function authMiddleware(
 
     const { name, user_id, email } = jwt.verify(token, secretKey) as IPayload;
 
-    request.user_id = user_id;
+    request.headers.user_id = user_id;
     request.name = name;
     request.email = email;
 

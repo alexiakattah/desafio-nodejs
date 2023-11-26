@@ -6,6 +6,10 @@ class ProjectUseCase {
   constructor(private projectRepository: ProjectRepository) {}
 
   public async create(project: Project): Promise<Project> {
+    console.log(
+      "🚀 ~ file: projectUseCase.ts:9 ~ ProjectUseCase ~ create ~ project:",
+      project.members
+    );
     const newProject = await this.projectRepository.create(project);
 
     return newProject;

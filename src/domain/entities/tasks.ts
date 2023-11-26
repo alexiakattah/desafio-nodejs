@@ -1,8 +1,8 @@
-export default class Tasks {
+export class Tasks {
   constructor(
     public title: string,
     public description: string,
-    public members: string[],
+    public members: any,
     public tags: string[],
     public projectId: string,
     public status: Status,

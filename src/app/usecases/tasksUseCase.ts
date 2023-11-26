@@ -1,4 +1,4 @@
-import Tasks from "@/domain/entities/tasks";
+import { Tasks } from "@/domain/entities/tasks";
 import HttpError from "../errors/httpError";
 import TasksRepository from "../repositories/tasksRepository";
 import ProjectUseCase from "./projectUseCase";
@@ -8,9 +8,8 @@ class TasksUseCase {
   constructor(
     private readonly tasksRepository: TasksRepository,
     private readonly projectUseCase: ProjectUseCase,
-    private readonly userUseCase: UserUseCase
-  ) // private readonly tagUseCase: TagUseCase
-  {}
+    private readonly userUseCase: UserUseCase // private readonly tagUseCase: TagUseCase
+  ) {}
 
   async create(tasks: Tasks, userId: string): Promise<Tasks> {
     const project = await this.projectUseCase.findProjectById(tasks.projectId);

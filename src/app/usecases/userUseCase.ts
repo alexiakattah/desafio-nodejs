@@ -1,5 +1,6 @@
 import User from "@/domain/entities/user";
-import { hash } from "bcrypt";
+import { compare, hash } from "bcrypt";
+import jwt from "jsonwebtoken";
 import HttpError from "../errors/httpError";
 import UserRepository from "../repositories/userRepository";
 
@@ -19,6 +20,40 @@ class UserUseCase {
     const user = await this.userRepository.findUserById(id);
     if (!user) throw new HttpError(404, "User not found");
     return user;
+  }
+  public async login(email: string, password: string) {
+    const findUser = await this.userRepository.findUserByEmail(email);
+
+    if (!findUser) {
+      throw new HttpError(400, "User not exists.");
+    }
+    const passwordMatch = await compare(password, findUser.password!);
+
+    if (!passwordMatch) {
+      throw new HttpError(400, "User or password invalid");
+    }
+
+    const secretKey: any = process.env.TOKEN_SECRET;
+    if (!secretKey) {
+      throw new HttpError(498, "TOKEN_SECRET not found");
+    }
+
+    const token = jwt.sign(
+      { name: findUser.name!, id: findUser.id, email },
+      secretKey,
+      {
+        expiresIn: "7d",
+      }
+    );
+
+    return {
+      token,
+      user: {
+        email: findUser.email,
+        name: findUser.name,
+        id: findUser.id,
+      },
+    };
   }
 }
 

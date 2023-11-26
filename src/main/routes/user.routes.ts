@@ -5,4 +5,6 @@ import { makeUserUseCase } from "../factories/userFactory";
 const userController = new UserController(makeUserUseCase());
 export const UserRoutes = (router: Router): void => {
   router.post("/register", adaptRoute(userController, "register"));
+
+  router.post("/login", adaptRoute(userController, "login"));
 };

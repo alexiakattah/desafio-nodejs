@@ -1,5 +1,5 @@
-import { Status } from "@/domain/entities/tasks";
 import { HttpRequest, HttpResponse } from "@/infra/http/httpAdapter";
+import { Status } from "../../domain/entities/tasks";
 import TasksUseCase from "../usecases/tasksUseCase";
 
 export default class TasksController {

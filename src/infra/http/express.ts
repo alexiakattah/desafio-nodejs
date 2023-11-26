@@ -3,7 +3,6 @@ import { TasksRoutes } from "@/main/routes/tasks.routes";
 import { UserRoutes } from "@/main/routes/user.routes";
 import cors from "cors";
 import express from "express";
-import { errorMiddleware } from "../middlewares/errorMiddleware";
 import HttpServer from "./server";
 
 export default class ExpressAdapter extends HttpServer {
@@ -18,7 +17,6 @@ export default class ExpressAdapter extends HttpServer {
     UserRoutes(this.app);
     ProjectRoutes(this.app);
     TasksRoutes(this.app);
-    this.app.use(errorMiddleware);
   }
 
   listen(port: number, callback: Function): void {

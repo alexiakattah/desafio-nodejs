@@ -10,9 +10,12 @@ class TasksRepositoryPrisma implements TasksRepository {
         description: task.description,
         status: task.status,
         projectId: task.projectId,
-        members: task.members.map((member: string) => ({
-          id: member,
-        })),
+        members: {
+          connect: task.members.map((member: string) => ({
+            id: member,
+          })),
+        },
+
         tags: {
           connect: task.tags.map((tag: string) => ({
             id: tag,

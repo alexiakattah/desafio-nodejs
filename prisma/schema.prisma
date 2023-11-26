@@ -15,7 +15,7 @@ model User {
   name     String
   email    String    @unique
   password String
-  projects Project[]
+  projects Project[] @relation("UserProjects")
 
   @@map("users")
 }
@@ -25,7 +25,7 @@ model Project {
   name        String
   description String
   createdAt   DateTime @default(now())
-  members     User[]
+  members     User[]   @relation("UserProjects")
   tasks       Task[]
 
   @@map("projects")

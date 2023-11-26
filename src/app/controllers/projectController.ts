@@ -8,17 +8,19 @@ export default class ProjectController {
 
   public async create(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      const { name, description, members } = httpRequest.body;
+      const { name, description } = httpRequest.body;
+      const { user_id } = httpRequest;
+
       if (!name || !description)
         return {
           status: 400,
-          message: "name or description",
+          message: "Missing name or description",
         };
 
       const project = await this.projectUseCase.create({
         name,
         description,
-        members: members ? members : [],
+        members: [user_id!],
       });
       return {
         status: 201,

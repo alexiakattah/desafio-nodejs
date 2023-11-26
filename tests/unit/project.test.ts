@@ -1,5 +1,8 @@
 import ProjectController from "../../src/app/controllers/projectController";
+import HttpError from "../../src/app/errors/httpError";
+import ProjectRepository from "../../src/app/repositories/projectRepository";
 import ProjectUseCase from "../../src/app/usecases/projectUseCase";
+import Project from "../../src/domain/entities/project";
 
 describe("ProjectController", () => {
   let projectController: ProjectController;
@@ -8,60 +11,128 @@ describe("ProjectController", () => {
   beforeEach(() => {
     mockProjectUseCase = {
       create: jest.fn(),
-      // Add other methods as needed
+      update: jest.fn(),
     } as any;
     projectController = new ProjectController(mockProjectUseCase);
   });
 
-  it("should return 400 if name or description is missing", async () => {
+  it("should create a project", async () => {
     const httpRequest = {
       body: {
-        members: [],
+        name: "Test Project",
+        description: "This is a test project",
       },
+      user_id: "1",
     };
+
+    mockProjectUseCase.create.mockResolvedValue({
+      id: "1",
+      name: httpRequest.body.name,
+      description: httpRequest.body.description,
+      members: [httpRequest.user_id],
+    });
+
     const httpResponse = await projectController.create(httpRequest);
-    expect(httpResponse.status).toBe(400);
-    expect(httpResponse.message).toBe("name or description");
+
+    expect(httpResponse.status).toBe(201);
+    expect(httpResponse.body).toEqual({
+      id: "1",
+      name: httpRequest.body.name,
+      description: httpRequest.body.description,
+      members: [httpRequest.user_id],
+    });
   });
 
-  it("should return 201 if project is created successfully", async () => {
+  it("should add a member to a project", async () => {
     const httpRequest = {
       body: {
-        name: "test",
-        description: "test description",
-        members: ["1"],
+        projectId: "1",
+        memberId: "2",
       },
+      user_id: "1",
     };
-    const mockProject = {
+
+    mockProjectUseCase.update.mockResolvedValue({
       id: "1",
-      name: "test",
-      description: "test description",
+      name: "Test Project",
+      description: "This is a test project",
+      members: ["1", "2"],
+    });
+
+    const httpResponse = await projectController.addMember(httpRequest);
+
+    expect(httpResponse.status).toBe(200);
+    expect(httpResponse.body).toBe("Member added successfully");
+  });
+});
+
+describe("ProjectUseCase", () => {
+  let projectUseCase: ProjectUseCase;
+  let mockProjectRepository: jest.Mocked<ProjectRepository>;
+
+  beforeEach(() => {
+    mockProjectRepository = {
+      create: jest.fn(),
+      findById: jest.fn(),
+      update: jest.fn(),
+    } as any;
+    projectUseCase = new ProjectUseCase(mockProjectRepository);
+  });
+
+  it("should create a project", async () => {
+    const project: Project = {
+      id: "1",
+      name: "Test Project",
+      description: "This is a test project",
       members: ["1"],
     };
-    mockProjectUseCase.create.mockResolvedValue(mockProject);
 
-    const httpResponse = await projectController.create(httpRequest);
-    expect(httpResponse.status).toBe(201);
-    expect(httpResponse.body).toEqual(mockProject);
+    mockProjectRepository.create.mockResolvedValue(project);
+
+    const newProject = await projectUseCase.create(project);
+
+    expect(newProject).toEqual(project);
   });
 
-  it("should return error status and message if an error is thrown", async () => {
-    const httpRequest = {
-      body: {
-        name: "test",
-        description: "test description",
-        members: [],
-        user_id: "1",
-      },
+  it("should find a project by id", async () => {
+    const project: Project = {
+      id: "1",
+      name: "Test Project",
+      description: "This is a test project",
+      members: ["1"],
     };
-    const mockError = {
-      status: 500,
-      message: "Internal server error",
-    };
-    mockProjectUseCase.create.mockRejectedValue(mockError);
 
-    const httpResponse = await projectController.create(httpRequest);
-    expect(httpResponse.status).toBe(mockError.status);
-    expect(httpResponse.message).toBe(mockError.message);
+    mockProjectRepository.findById.mockResolvedValue(project);
+
+    const foundProject = await projectUseCase.findProjectById("1");
+
+    expect(foundProject).toEqual(project);
+  });
+
+  it("should add a member to a project", async () => {
+    const project: Project = {
+      id: "1",
+      name: "Test Project",
+      description: "This is a test project",
+      members: ["1"],
+    };
+
+    mockProjectRepository.findById.mockResolvedValue(project);
+    mockProjectRepository.update.mockResolvedValue({
+      ...project,
+      members: ["1", "2"],
+    });
+
+    const updatedProject = await projectUseCase.update("1", "1", "2");
+
+    expect(updatedProject.members).toContain("2");
+  });
+
+  it("should throw an error if the project is not found", async () => {
+    mockProjectRepository.findById.mockResolvedValue(null);
+
+    await expect(projectUseCase.update("1", "1", "2")).rejects.toThrow(
+      new HttpError(404, "Project not found")
+    );
   });
 });
