@@ -31,4 +31,14 @@ export default class ProjectController {
       };
     }
   }
+  async addMember(req: HttpRequest): Promise<HttpResponse> {
+    const { projectId, memberId } = req.body;
+    const currentUserId = req.user_id;
+    if (!projectId || !memberId)
+      return { status: 400, message: "Missing projectId or memberId" };
+
+    await this.projectUseCase.update(projectId, currentUserId!, memberId);
+
+    return { status: 200, body: "Member added successfully" };
+  }
 }

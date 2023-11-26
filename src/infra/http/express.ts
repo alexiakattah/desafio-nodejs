@@ -1,4 +1,5 @@
 import { ProjectRoutes } from "@/main/routes/project.routes";
+import { TasksRoutes } from "@/main/routes/tasks.routes";
 import { UserRoutes } from "@/main/routes/user.routes";
 import cors from "cors";
 import express from "express";
@@ -16,6 +17,7 @@ export default class ExpressAdapter extends HttpServer {
     this.app.use(express.urlencoded({ extended: true }));
     UserRoutes(this.app);
     ProjectRoutes(this.app);
+    TasksRoutes(this.app);
     this.app.use(errorMiddleware);
   }
 

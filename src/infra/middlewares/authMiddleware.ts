@@ -1,6 +1,6 @@
 import HttpError from "@/app/errors/httpError";
 import { NextFunction, Request, Response } from "express";
-import { verify } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 interface IPayload {
   name: string;
   email: string;
@@ -22,7 +22,7 @@ export function authMiddleware(
       throw new HttpError(498, "TOKEN_SECRET not found");
     }
 
-    const { name, user_id, email } = verify(token, secretKey) as IPayload;
+    const { name, user_id, email } = jwt.verify(token, secretKey) as IPayload;
 
     request.user_id = user_id;
     request.name = name;

@@ -16,6 +16,8 @@ model User {
   email    String    @unique
   password String
   projects Project[]
+
+  @@map("users")
 }
 
 model Project {
@@ -25,10 +27,12 @@ model Project {
   createdAt   DateTime @default(now())
   members     User[]
   tasks       Task[]
+
+  @@map("projects")
 }
 
 model Task {
-  id          Int      @id @default(autoincrement())
+  id          String   @id @default(uuid())
   title       String   @db.VarChar(255)
   description String
   createdAt   DateTime @default(now())
@@ -36,6 +40,8 @@ model Task {
   projectId   String
   project     Project  @relation(fields: [projectId], references: [id])
   tags        Tag[]
+
+  @@map("tasks")
 }
 
 enum Status {
@@ -45,8 +51,10 @@ enum Status {
 }
 
 model Tag {
-  id     Int    @id @default(autoincrement())
+  id     String @id @default(uuid())
   title  String
-  taskId Int
+  taskId String
   task   Task   @relation(fields: [taskId], references: [id])
+
+  @@map("tags")
 }

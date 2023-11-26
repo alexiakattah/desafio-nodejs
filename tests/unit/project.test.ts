@@ -1,5 +1,5 @@
-import ProjectController from "../src/app/controllers/projectController";
-import ProjectUseCase from "../src/app/usecases/projectUseCase";
+import ProjectController from "../../src/app/controllers/projectController";
+import ProjectUseCase from "../../src/app/usecases/projectUseCase";
 
 describe("ProjectController", () => {
   let projectController: ProjectController;
@@ -51,6 +51,7 @@ describe("ProjectController", () => {
         name: "test",
         description: "test description",
         members: [],
+        user_id: "1",
       },
     };
     const mockError = {

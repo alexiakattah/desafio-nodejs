@@ -1,4 +1,4 @@
-import UserUseCase from "../src/app/usecases/userUseCase";
+import UserUseCase from "../../src/app/usecases/userUseCase";
 
 describe("User", () => {
   beforeEach(() => {

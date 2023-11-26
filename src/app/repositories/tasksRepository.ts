@@ -1,12 +1,7 @@
-import { Task } from "@prisma/client";
+import Tasks from "@/domain/entities/tasks";
 
 abstract class TasksRepository {
-  abstract getAllTasks(): Promise<Task[]>;
-  abstract getTaskById(id: number): Promise<Task>;
-  abstract getTaskByProjectId(projectId: number): Promise<Task[]>;
-  abstract create(task: Task): Promise<Task>;
-  abstract update(id: number, task: Task): Promise<Task>;
-  abstract delete(id: number): Promise<Task>;
+  abstract create(task: Tasks): Promise<Tasks>;
 }
 
 export default TasksRepository;

@@ -15,6 +15,11 @@ class UserUseCase {
       password: hashedPassword,
     });
   }
+  public async findUserById(id: string): Promise<User> {
+    const user = await this.userRepository.findUserById(id);
+    if (!user) throw new HttpError(404, "User not found");
+    return user;
+  }
 }
 
 export default UserUseCase;
