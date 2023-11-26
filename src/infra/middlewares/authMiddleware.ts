@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 interface IPayload {
   name: string;
   email: string;
-  user_id: string;
+  id: string;
 }
 export function authMiddleware(
   request: Request,
@@ -22,9 +22,9 @@ export function authMiddleware(
       throw new HttpError(498, "TOKEN_SECRET not found");
     }
 
-    const { name, user_id, email } = jwt.verify(token, secretKey) as IPayload;
+    const { name, id, email } = jwt.verify(token, secretKey) as IPayload;
 
-    request.headers.user_id = user_id;
+    request.user_id = id;
     request.name = name;
     request.email = email;
 

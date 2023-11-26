@@ -25,6 +25,31 @@ class TasksRepositoryPrisma implements TasksRepository {
     });
     return result;
   }
+  async update(task: Tasks): Promise<Tasks> {
+    const result = await prisma.task.update({
+      where: {
+        id: task.id,
+      },
+      data: {
+        title: task.title,
+        description: task.description,
+        status: task.status,
+        projectId: task.projectId,
+        members: {
+          connect: task.members.map((member: string) => ({
+            id: member,
+          })),
+        },
+
+        tags: {
+          connect: task.tags.map((tag: string) => ({
+            id: tag,
+          })),
+        },
+      },
+    });
+    return result;
+  }
 }
 
 export default TasksRepositoryPrisma;

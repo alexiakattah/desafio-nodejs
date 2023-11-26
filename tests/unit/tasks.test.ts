@@ -9,8 +9,65 @@ describe("TasksController", () => {
   beforeEach(() => {
     mockTasksUseCase = {
       create: jest.fn(),
+      update: jest.fn(),
     } as any;
     tasksController = new TasksController(mockTasksUseCase);
+  });
+  it("should update a task", async () => {
+    const httpRequest = {
+      body: {
+        title: "Updated Task",
+        description: "This is an updated task",
+        members: ["1"],
+        tags: ["tag1", "tag2"],
+        status: Status.COMPLETED,
+        projectId: "1",
+      },
+      params: {
+        id: "1",
+      },
+      user_id: "1",
+    };
+
+    mockTasksUseCase.update.mockResolvedValue({
+      ...httpRequest.body,
+      id: httpRequest.params.id,
+    });
+
+    const httpResponse = await tasksController.update(httpRequest);
+
+    expect(httpResponse.status).toBe(200);
+    expect(httpResponse.body).toEqual({
+      ...httpRequest.body,
+      id: httpRequest.params.id,
+    });
+  });
+  it("should return an error if an exception is thrown", async () => {
+    const httpRequest = {
+      body: {
+        title: "Updated Task",
+        description: "This is an updated task",
+        members: ["1"],
+        tags: ["tag1", "tag2"],
+        status: Status.COMPLETED,
+        projectId: "1",
+      },
+      params: {
+        id: "1",
+      },
+      user_id: "1",
+    };
+
+    mockTasksUseCase.update.mockRejectedValue(new Error("An error occurred"));
+
+    const httpResponse = await tasksController.update(httpRequest);
+    console.log(
+      "🚀 ~ file: tasks.test.ts:64 ~ it ~ httpResponse:",
+      httpResponse
+    );
+
+    expect(httpResponse.status).toBe(500);
+    expect(httpResponse.message).toBe("An error occurred");
   });
 
   it("should create a task", async () => {
@@ -56,6 +113,10 @@ describe("TasksController", () => {
     };
 
     const httpResponse = await tasksController.create(httpRequest);
+    console.log(
+      "🚀 ~ file: tasks.test.ts:112 ~ it ~ httpResponse:",
+      httpResponse
+    );
 
     expect(httpResponse.status).toBe(400);
     expect(httpResponse.message).toBe("name or description");

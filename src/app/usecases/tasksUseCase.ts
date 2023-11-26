@@ -67,5 +67,38 @@ class TasksUseCase {
 
     return newTask;
   }
+  async update(tasks: Tasks, id: string, userId: string): Promise<Tasks> {
+    const project = await this.projectUseCase.findProjectById(tasks.projectId);
+
+    if (!project) {
+      throw new HttpError(404, "Project not found");
+    }
+    if (project.members[0] !== userId) {
+      throw new HttpError(403, "You are not a member of this project");
+    }
+
+    for (const member of tasks.members) {
+      const findByMember = this.userUseCase.findUserById(member);
+      if (!findByMember) {
+        throw new HttpError(404, "Member not found");
+      }
+      tasks.members.push(member);
+    }
+    for (const tag of tasks.tags) {
+      if (!tag) {
+        throw new HttpError(400, "Tag is required");
+      }
+    }
+    const newTask = {
+      ...tasks,
+      members: tasks.members,
+      tags: tasks.tags,
+      id,
+    };
+
+    await this.tasksRepository.update(newTask);
+
+    return newTask;
+  }
 }
 export default TasksUseCase;
