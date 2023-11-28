@@ -4,8 +4,6 @@
 
 # Desafio Backend | NodeJS
 
-Olá, candidato! Se você chegou até aqui, é porque demonstrou interesse em fazer parte do nosso time. Preparamos um desafio para entendermos um pouco mais sobre suas habilidades como desenvolvedor backend em NodeJS.
-
 ## 🚀 Objetivo:
 
 Desenvolver uma API para gerenciar um sistema de tarefas e projetos, permitindo que usuários criem projetos e associem tarefas a eles.
@@ -18,77 +16,33 @@ Desenvolver uma API para gerenciar um sistema de tarefas e projetos, permitindo 
 4. Tarefas concluídas não podem ser editadas.
 5. As tarefas precisam ter tags
 
-## 💻 Tecnologias:
+## 🚀 Local Setup:
 
-- Node.js com TypeScript
+1. Clone the repository
+2. Install dependencies with `npm install`
+3. Start the server with `npm start`
+
+## 🐳 Docker Setup:
+
+1. Build the Docker image with `docker-compose build`
+2. Start the Docker container with `docker-compose up`
+
+## 🧪 Running Tests:
+
+1. Install the dependencies with `npm install`
+2. Run the tests with `npm test`
+
+## 🛠️ Technologies Used:
+
+- Node.js
+- Express.js
 - PostgreSQL
-- Prisma ORM
+- Docker
+- Prisma
+- Swagger for API documentation
 
-## 📜 Requisitos:
+## 📚 API Documentation:
 
-### 1. Configuração Inicial:
+You can view the API documentation at `http://localhost:3333/api-docs` when the server is running. The documentation is generated with Swagger and provides information about the available endpoints, request parameters, and response formats.
 
-- Configurar um projeto usando Node.js e TypeScript.
-- Configurar um banco de dados PostgreSQL (Local).
-- Utilizar o Prisma como ORM.
 
-### 2. Modelo de Dados:
-
-#### Usuário (`User`):
-
-- ID: ID gerado automaticamente.
-- Nome: Texto.
-- Email: Texto, único.
-- Senha: Texto, encriptada.
-
-#### Projeto (`Project`):
-
-- ID: ID gerado automaticamente.
-- Nome: Texto.
-- Descrição: Texto.
-- Membros: Lista de usuários associados ao projeto.
-
-#### Tarefa (`Task`):
-
-- ID: ID gerado automaticamente.
-- Título: Texto, máximo de 255 caracteres.
-- Descrição: Texto.
-- Data de criação: Data e hora, gerada automaticamente.
-- Status: Enum (Pendente, Em andamento, Concluída).
-- Projeto: Referência ao projeto ao qual pertence.
-
-#### Tag (`Tag`):
-
-- ID: ID gerado automaticamente.
-- Título: Texto.
-- Tarefa: Referência a tarefa ao qual pertence.
-
-### 4. Validações e Erros:
-
-- Implemente validações para garantir a integridade dos dados.
-- Responda com mensagens de erro claras e status HTTP apropriados.
-
-## 🥇 Diferenciais:
-
-- Testes unitários e/ou de integração.
-- Documentação com Swagger.
-- Paginação nos endpoints.
-- Registro de logs.
-- Dockerização da aplicação.
-- Uso de um linter (como ESLint) e formatador de código (como Prettier).
-
-## 🗳️ Instruções de Submissão:
-
-1. Faça um fork deste repositório para sua conta pessoal do GitHub.
-2. Commit e push suas mudanças para o seu fork.
-3. Envie um e-mail para [arthur.olga@khipo.com.br] com o link do repositório.
-
-## 🧪 Avaliação:
-
-- Estrutura do código e organização.
-- Uso adequado das ferramentas e tecnologias.
-- Implementação dos requisitos e regras de negócio.
-- Design e usabilidade.
-- Funcionalidades extras (diferenciais).
-
-Boa sorte com o desafio! Estamos ansiosos para ver sua solução.
