@@ -15,7 +15,7 @@ services:
       - db
     volumes:
       - .:/app
-    command: npm run dev
+    command: npm run start
 
   db:
     image: postgres:14-alpine
