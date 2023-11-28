@@ -5,5 +5,10 @@ import { adaptRoute } from "../adapters/adapterRoute";
 import { makeTasksUseCase } from "../factories/tasksFactory";
 const tasksController = new TasksController(makeTasksUseCase());
 export const TasksRoutes = (router: Router): void => {
-  router.post("/create", authMiddleware, adaptRoute(tasksController, "create"));
+  const prefix = "/tasks";
+  router.post(
+    prefix + "/",
+    authMiddleware,
+    adaptRoute(tasksController, "create")
+  );
 };

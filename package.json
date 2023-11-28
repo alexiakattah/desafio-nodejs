@@ -12,7 +12,7 @@
   "keywords": [],
   "author": "",
   "engines": {
-    "node": "18.16.1"
+    "node": ">=18"
   },
   "license": "ISC",
   "devDependencies": {

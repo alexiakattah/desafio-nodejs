@@ -7,7 +7,7 @@ const projectController = new ProjectController(makeProjectUseCase());
 export const ProjectRoutes = (router: Router): void => {
   const prefix = "/project";
   router.post(
-    prefix + "/create",
+    prefix + "/",
     authMiddleware,
     adaptRoute(projectController, "create")
   );

@@ -1,0 +1,30 @@
+version: "3"
+services:
+  api:
+    build:
+      context: .
+      dockerfile: .Dockerfile
+    ports:
+      - 3333:3333
+    environment:
+      - POSTGRES_USER=alexiakattah
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=khipo
+      - DATABASE_URL=postgresql://alexiakattah:root@localhost:5432/khipo?schema=public
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+    command: npm run dev
+
+  db:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_USER=alexiakattah
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=khipo
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
