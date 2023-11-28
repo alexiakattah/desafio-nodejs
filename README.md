@@ -4,6 +4,8 @@
 
 # Desafio Backend | NodeJS
 
+  Api 
+
 ## 🚀 Objetivo:
 
 Desenvolver uma API para gerenciar um sistema de tarefas e projetos, permitindo que usuários criem projetos e associem tarefas a eles.
@@ -40,9 +42,17 @@ Desenvolver uma API para gerenciar um sistema de tarefas e projetos, permitindo 
 - Docker
 - Prisma
 - Swagger for API documentation
+- JWT Authentication
+
 
 ## 📚 API Documentation:
 
 You can view the API documentation at `http://localhost:3333/api-docs` when the server is running. The documentation is generated with Swagger and provides information about the available endpoints, request parameters, and response formats.
 
 
+## 📝 TODO:
+
+- [ ] Add pagination to the list endpoints
+- [ ] Improve error handling
+- [ ] Write more unit tests
+- [ ] Set up continuous integration with GitHub Actions
